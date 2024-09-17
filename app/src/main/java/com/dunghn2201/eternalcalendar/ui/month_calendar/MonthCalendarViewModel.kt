@@ -34,7 +34,6 @@ class MonthCalendarViewModel @Inject constructor(application: Application) : Bas
             val month = localDateNow.monthValue
             val year = localDateNow.year
 
-
             val totalDaysInTargetMonth = localDateNow.lengthOfMonth()
             Timber.e("/// currentDayOfMonth $dayOfMonth")
             Timber.e("/// currentMonth $month")
@@ -80,7 +79,6 @@ class MonthCalendarViewModel @Inject constructor(application: Application) : Bas
         val dayOfWeek: DayOfWeek = dayOfWeek
         return dayOfWeek == DayOfWeek.SATURDAY || dayOfWeek == DayOfWeek.SUNDAY
     }
-
 }
 
 data class DayCalendarItem(
@@ -101,7 +99,7 @@ data class DayCalendarItem(
     val colorDayText get() = if (isWeekend) Color.Red else Color.Black
     val colorDot get() = if (isNgayHoangDao) Color.Red else Color.Black
     val isNow
-        get() :Boolean {
+        get(): Boolean {
             val date: LocalDate = LocalDate.now()
             val dayOfMonthTarget = date.dayOfMonth
             val monthTarget = date.monthValue
@@ -111,5 +109,4 @@ data class DayCalendarItem(
                 year == yearTarget
         }
     val bgColor get() = if (isNow) LightSkyBlue else Color.White
-
 }
