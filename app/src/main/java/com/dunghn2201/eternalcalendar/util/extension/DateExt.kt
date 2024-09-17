@@ -1,11 +1,9 @@
 package com.dunghn2201.eternalcalendar.util.extension
 
-import android.icu.util.ChineseCalendar
 import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.util.*
-import timber.log.Timber
 
 fun Calendar.getDayOfWeek(): String {
     val dayOfWeekPattern = "EEEE"

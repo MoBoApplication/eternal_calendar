@@ -17,12 +17,10 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.input.pointer.positionChange
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
@@ -33,13 +31,10 @@ import com.chargemap.compose.numberpicker.NumberPicker
 import com.dunghn2201.eternalcalendar.R
 import com.dunghn2201.eternalcalendar.ui.theme.*
 import com.dunghn2201.eternalcalendar.util.extension.*
-import java.text.SimpleDateFormat
 import java.time.LocalTime
 import java.util.*
-import kotlinx.coroutines.NonDisposableHandle.parent
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import timber.log.Timber
 
 @Composable
 fun DayCalendarScreen() {
@@ -375,7 +370,7 @@ fun DayCalendarScreen() {
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
                 Text(
-                    text = String.format("%02d", uiState.dayLunar),
+                    text = String.format(Locale.getDefault(), "%02d", uiState.dayLunar),
                     fontSize = 60.sp,
                     fontFamily = OpenSansBold,
                     color = PersianBlue,
@@ -394,13 +389,14 @@ fun DayCalendarScreen() {
             }
         }
         /** PickDateDialog */
-        if (showPickDateDialog)
+        if (showPickDateDialog) {
             PickDateDialog(onDismissRequest = {
                 showPickDateDialog = false
             }) { datePicked ->
                 viewModel.getCalendarInfoByDate(datePicked)
                 showPickDateDialog = false
             }
+        }
     }
 }
 
@@ -440,7 +436,7 @@ fun PickDateDialog(onDismissRequest: () -> Unit, onPickDateSelected: (Calendar) 
                     textAlign = TextAlign.Center,
                     fontFamily = OpenSansSemiBold,
                     fontSize = 18.sp,
-                    color = Color.White
+                    color = Color.White,
                 )
                 Row(
                     modifier = Modifier
@@ -449,48 +445,59 @@ fun PickDateDialog(onDismissRequest: () -> Unit, onPickDateSelected: (Calendar) 
                         .constrainAs(rowContent) {
                             top.linkTo(title.bottom)
                         },
-                    horizontalArrangement = Arrangement.Center
+                    horizontalArrangement = Arrangement.Center,
                 ) {
                     /** day */
                     NumberPicker(
-                        value = daySelected, onValueChange = {
+                        value = daySelected,
+                        onValueChange = {
                             daySelected = it
                             calendar.set(Calendar.DAY_OF_MONTH, it)
-                        }, range = 1..totalDayInMonth, textStyle = TextStyle(
+                        },
+                        range = 1..totalDayInMonth,
+                        textStyle = TextStyle(
                             fontFamily = OpenSansMedium,
-                            color = PersianBlue
-                        )
+                            color = PersianBlue,
+                        ),
                     )
                     Spacer(modifier = Modifier.width(20.dp))
                     /** month */
                     NumberPicker(
-                        value = monthSelected, onValueChange = {
+                        value = monthSelected,
+                        onValueChange = {
                             monthSelected = it
                             calendar.set(Calendar.MONTH, it - 1)
-                        }, range = 1..12, textStyle = TextStyle(
+                        },
+                        range = 1..12,
+                        textStyle = TextStyle(
                             fontFamily = OpenSansMedium,
-                            color = PersianBlue
-                        )
+                            color = PersianBlue,
+                        ),
                     )
                     Spacer(modifier = Modifier.width(20.dp))
                     /** year */
                     NumberPicker(
                         modifier = Modifier,
-                        value = yearSelected, onValueChange = {
+                        value = yearSelected,
+                        onValueChange = {
                             yearSelected = it
                             calendar.set(Calendar.YEAR, it)
-                        }, range = years, textStyle = TextStyle(
+                        },
+                        range = years,
+                        textStyle = TextStyle(
                             fontFamily = OpenSansMedium,
-                            color = PersianBlue
-                        )
+                            color = PersianBlue,
+                        ),
                     )
                 }
-                Column(modifier = Modifier
-                    .fillMaxWidth()
-                    .constrainAs(Ok) {
-                        top.linkTo(rowContent.bottom)
-                        bottom.linkTo(parent.bottom)
-                    }) {
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .constrainAs(Ok) {
+                            top.linkTo(rowContent.bottom)
+                            bottom.linkTo(parent.bottom)
+                        },
+                ) {
                     Divider(modifier = Modifier.fillMaxWidth(), color = Color.Black)
                     Text(
                         modifier = Modifier
@@ -505,7 +512,6 @@ fun PickDateDialog(onDismissRequest: () -> Unit, onPickDateSelected: (Calendar) 
                         textAlign = TextAlign.Center,
                     )
                 }
-
             }
         }
     }

@@ -6,12 +6,10 @@ import androidx.annotation.RawRes
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.graphics.Color
 import com.dunghn2201.eternalcalendar.R
 import com.dunghn2201.eternalcalendar.base.BaseViewModel
 import com.dunghn2201.eternalcalendar.model.Events
 import com.dunghn2201.eternalcalendar.model.Quotations
-import com.dunghn2201.eternalcalendar.ui.theme.NaturalGrey
 import com.dunghn2201.eternalcalendar.ui.theme.PersianBlue
 import com.dunghn2201.eternalcalendar.ui.theme.RudyRed
 import com.dunghn2201.eternalcalendar.util.extension.*
@@ -19,7 +17,6 @@ import com.squareup.moshi.Moshi
 import dagger.hilt.android.lifecycle.HiltViewModel
 import java.util.*
 import javax.inject.Inject
-import kotlin.text.Typography.quote
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
@@ -37,7 +34,6 @@ class DayCalendarViewModel @Inject constructor(val application: Application, val
         eventCollection = getEvent()
         getCalendarInfoByDate(uiState.now)
     }
-
 
     fun getCalendarInfoByDate(calendar: Calendar) {
         launchCoroutine {
@@ -74,8 +70,6 @@ class DayCalendarViewModel @Inject constructor(val application: Application, val
                 )
             }
         }
-
-
     }
 
     private fun getEvent(): List<Events.Event> {

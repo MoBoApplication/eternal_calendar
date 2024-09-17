@@ -1,8 +1,9 @@
 plugins {
   id 'com.android.application'
   id 'org.jetbrains.kotlin.android'
-  id 'kotlin-kapt'
   id 'dagger.hilt.android.plugin'
+  id 'org.jetbrains.kotlin.plugin.compose'
+  id "com.google.devtools.ksp"
 }
 
 def versionMajor = 1
@@ -12,13 +13,12 @@ def versionIncrement = 0
 
 android {
   namespace 'com.dunghn2201.eternalcalendar'
-  compileSdk 33
-  ndkVersion "25.1.8937393"
+  compileSdk 34
 
   defaultConfig {
     applicationId "com.dunghn2201.eternalcalendar"
     minSdk 26
-    targetSdk 33
+    targetSdk 34
     versionCode versionMajor * 100000 + versionMinor * 1000 + versionPatch * 100 + versionIncrement
     versionName "${versionMajor}.${versionMinor}.${versionPatch}"
 
@@ -52,7 +52,7 @@ android {
       }
     }
   }
-  flavorDimensions "version"
+  flavorDimensions = ["version"]
   productFlavors {
     def APP_NAME = "APP_NAME"
     develop {
@@ -100,10 +100,11 @@ android {
     jvmTarget = '1.8'
   }
   buildFeatures {
+    buildConfig true
     compose true
   }
   composeOptions {
-    kotlinCompilerExtensionVersion '1.2.0'
+    kotlinCompilerExtensionVersion '1.5.15'
   }
   packagingOptions {
     resources {
@@ -121,7 +122,7 @@ android {
   // Official document: https://developer.android.com/studio/releases/gradle-plugin#package-deprecated
   namespace 'com.dunghn2201.eternalcalendar'
 
-  applicationVariants.all { variant ->
+  applicationVariants.configureEach { variant ->
     def localProperties = new Properties()
     def propertiesFile = rootProject.file("local.properties")
     // Skipped because local.properties does not exist on CI
@@ -132,15 +133,15 @@ android {
 
 dependencies {
 
-  implementation 'androidx.core:core-ktx:1.10.1'
-  implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.6.1'
-  implementation 'androidx.activity:activity-compose:1.7.2'
+  implementation 'androidx.core:core-ktx:1.13.1'
+  implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.8.5'
+  implementation 'androidx.activity:activity-compose:1.9.2'
   implementation "androidx.compose.ui:ui:$compose_ui_version"
   implementation "androidx.compose.ui:ui-tooling-preview:$compose_ui_version"
-  implementation 'androidx.compose.material:material:1.4.3'
+  implementation 'com.google.android.material:material:1.12.0'
   testImplementation 'junit:junit:4.13.2'
-  androidTestImplementation 'androidx.test.ext:junit:1.1.5'
-  androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
+  androidTestImplementation 'androidx.test.ext:junit:1.2.1'
+  androidTestImplementation 'androidx.test.espresso:espresso-core:3.6.1'
   androidTestImplementation "androidx.compose.ui:ui-test-junit4:$compose_ui_version"
   debugImplementation "androidx.compose.ui:ui-tooling:$compose_ui_version"
   debugImplementation "androidx.compose.ui:ui-test-manifest:$compose_ui_version"
@@ -152,9 +153,9 @@ dependencies {
 
   //==================== Dependency Injection ====================
   implementation "com.google.dagger:hilt-android:$hilt_version"
-  kapt "com.google.dagger:hilt-compiler:$hilt_version"
-  implementation 'androidx.hilt:hilt-navigation-compose:1.0.0'
-  implementation "androidx.hilt:hilt-work:1.0.0"
+  ksp "com.google.dagger:hilt-compiler:$hilt_version"
+  implementation 'androidx.hilt:hilt-navigation-compose:1.2.0'
+  implementation "androidx.hilt:hilt-work:1.2.0"
 
   //==================== Logging ====================
   implementation "com.jakewharton.timber:timber:5.0.1"
@@ -173,7 +174,7 @@ dependencies {
   implementation "com.chargemap.compose:numberpicker:1.0.3"
 
   //==================== Moshi ====================
-  kapt "com.squareup.moshi:moshi-kotlin-codegen:$moshi_version"
+  ksp "com.squareup.moshi:moshi-kotlin-codegen:$moshi_version"
   implementation "com.squareup.moshi:moshi:$moshi_version"
   implementation "com.squareup.moshi:moshi-kotlin:$moshi_version"
   implementation "com.squareup.moshi:moshi-adapters:$moshi_version"
